@@ -17,7 +17,6 @@ interface Props {
   seasonNumber?: number;
 }
 
-// Функция для получения URL видео
 const getVideoUrl = (
   showId: number,
   seasonNumber: number,
@@ -89,7 +88,6 @@ const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
                 {episode.overview}
               </p>
 
-              {/* Dialog для полноэкранного плеера */}
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                   <Button

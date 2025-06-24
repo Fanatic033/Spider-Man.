@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 
 const HomePage = () => {
   const [shows, setShows] = useState<TMDBShow[]>([]);
-  const [selectedShow, setSelectedShow] = useState<any>(null);
+  const [selectedShow, setSelectedShow] = useState<TMDBShow | null>(null);
   const [seasons, setSeasons] = useState<TMDBSeason[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
   const [seasonEpisodes, setSeasonEpisodes] = useState<{
@@ -65,7 +65,6 @@ const HomePage = () => {
 
     setSelectedSeason(seasonNumber);
 
-    // Если эпизоды уже загружены для этого сезона, просто показываем их
     if (seasonEpisodes[seasonNumber]) {
       return;
     }
@@ -74,7 +73,7 @@ const HomePage = () => {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${selectedShow.id}/season/${seasonNumber}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=ru-RU`
+        `https://api.themoviedb.org/3/tv/${selectedShow?.id}/season/${seasonNumber}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=ru-RU`
       );
       const seasonDetails = await response.json();
       setSeasonEpisodes((prev) => ({
@@ -104,11 +103,9 @@ const HomePage = () => {
     );
   }
 
-  // Если выбран конкретный сериал, показываем его детали
   if (selectedShow) {
     return (
       <div className="min-h-screen bg-base-200">
-        {/* Hero Section для выбранного сериала */}
         <div className="relative h-96 bg-gradient-to-r from-red-600 to-blue-600">
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
@@ -150,7 +147,6 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Сезоны с эпизодами */}
         <div className="container mx-auto px-4 py-8">
           <h2 className="text-3xl font-bold mb-6">Сезоны</h2>
           <div className="space-y-6">
@@ -162,7 +158,6 @@ const HomePage = () => {
                   selectedSeason={selectedSeason}
                 />
 
-                {/* Эпизоды под карточкой сезона */}
                 {selectedSeason === season.season_number && (
                   <div className="ml-4 space-y-4">
                     {episodeLoading[season.season_number] ? (
@@ -189,7 +184,6 @@ const HomePage = () => {
     );
   }
 
-  // Главная страница со списком сериалов
   return (
     <div
       className="min-h-screen bg-base-200"
@@ -207,7 +201,6 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Сериалы */}
       <div className="container mx-auto px-4 py-12">
         <h2 className="text-3xl font-bold mb-8 text-center text-white">
           Сериалы про Человека-паука
