@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Comic_Neue } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/shared/utils/components/shared/Header";
+import { Header } from "@/shared/components/shared/Header";
 
 const ComicNeue = Comic_Neue({
   weight: ["300", "400", "700"],

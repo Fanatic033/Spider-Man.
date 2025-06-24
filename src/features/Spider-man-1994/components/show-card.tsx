@@ -1,16 +1,16 @@
 import Image from "next/image";
 import { FC } from "react";
-import { Button } from "@/shared/utils/components/ui/button";
-import { Card, CardContent } from "@/shared/utils/components/ui/card";
 import { Star, Badge } from "lucide-react";
 import { TMDBShow } from "@/features/types/types";
+import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent } from "@/shared/components/ui/card";
 
 interface Props {
-    show: TMDBShow
-    handleShowSelect: (show: TMDBShow) => void
+  show: TMDBShow;
+  handleShowSelect: (show: TMDBShow) => void;
 }
 
-const ShowCard:FC<Props> = ({show,handleShowSelect}) => {
+const ShowCard: FC<Props> = ({ show, handleShowSelect }) => {
   return (
     <Card
       key={show.id}

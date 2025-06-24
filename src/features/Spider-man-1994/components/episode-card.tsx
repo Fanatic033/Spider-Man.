@@ -3,9 +3,13 @@
 import { FC, useState } from "react";
 import Image from "next/image";
 import { TMDBEpisode } from "@/features/types/types";
-import { Button } from "@/shared/utils/components/ui/button";
-import { Card, CardContent } from "@/shared/utils/components/ui/card";
-import { Clock, Play, X, Maximize2 } from "lucide-react";
+import { Clock, Play, X } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent } from "@/shared/components/ui/card";
+import {
+  Dialog,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface Props {
   episode: TMDBEpisode;
@@ -13,13 +17,12 @@ interface Props {
   seasonNumber?: number;
 }
 
-// Функция для получения URL видео (здесь вы можете добавить свою логику)
+// Функция для получения URL видео
 const getVideoUrl = (
   showId: number,
   seasonNumber: number,
   episodeNumber: number
 ): string => {
-  // Пример маппинга для Spider-Man 1994
   const videoUrls: { [key: string]: string } = {
     "888-1-1": "https://play.boomstream.com/OVLHwdGD",
     "888-1-2": "https://play.boomstream.com/c2GPJlCC",
@@ -41,39 +44,13 @@ const getVideoUrl = (
 };
 
 const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const videoUrl =
     showId && seasonNumber
       ? getVideoUrl(showId, seasonNumber, episode.episode_number)
       : "";
   const hasVideo = Boolean(videoUrl);
-
-  // Отладка - выводим информацию в консоль
-  console.log("EpisodeCard Debug:", {
-    showId,
-    seasonNumber,
-    episodeNumber: episode.episode_number,
-    key: `${showId}-${seasonNumber}-${episode.episode_number}`,
-    videoUrl,
-    hasVideo,
-  });
-
-  const handlePlayClick = () => {
-    if (hasVideo) {
-      setIsPlaying(true);
-    }
-  };
-
-  const handleClosePlayer = () => {
-    setIsPlaying(false);
-    setIsFullscreen(false);
-  };
-
-  const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
 
   return (
     <>
@@ -112,138 +89,45 @@ const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
                 {episode.overview}
               </p>
 
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  className={hasVideo ? "btn-primary" : "btn-disabled"}
-                  onClick={handlePlayClick}
-                  disabled={!hasVideo}
-                >
-                  <Play className="w-4 h-4 mr-2" />
-                  {hasVideo ? "Смотреть" : "Недоступно"}
-                </Button>
-                {!hasVideo && (
-                  <span className="text-sm text-base-content/50 self-center">
-                    Эпизод пока недоступен
-                  </span>
-                )}
-              </div>
+              {/* Dialog для полноэкранного плеера */}
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    size="sm"
+                    className={hasVideo ? "btn-primary" : "btn-disabled"}
+                    disabled={!hasVideo}
+                  >
+                    <Play className="w-4 h-4 mr-2" />
+                    {hasVideo ? "Смотреть" : "Недоступно"}
+                  </Button>
+                </DialogTrigger>
 
-              {/* Встроенный плеер */}
-              <dialog id="modal" className="modal">
-                <div className="modal-box">
-                  <form method="dialog">
-                    {/* if there is a button in form, it will close the modal */}
-                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                      ✕
-                    </button>
-                  </form>
-                  {isPlaying && hasVideo && !isFullscreen && (
-                    <div className="mt-4 relative">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium">
-                          Сейчас смотрите: {episode.name}
-                        </span>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={toggleFullscreen}
-                            className="h-8 w-8 p-0"
-                          >
-                            <Maximize2 className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={handleClosePlayer}
-                            className="h-8 w-8 p-0"
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-                        <iframe
-                          src={videoUrl}
-                          className="w-full h-full"
-                          allowFullScreen
-                          frameBorder="0"
-                          title={episode.name}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  <p className="py-4">
-                    Press ESC key or click on ✕ button to close
-                  </p>
-                </div>
-              </dialog>
-              {/* {isPlaying && hasVideo && !isFullscreen && (
-                <div className="mt-4 relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">
-                      Сейчас смотрите: {episode.name}
-                    </span>
-                    <div className="flex gap-2">
+                {open && hasVideo && (
+                  <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
+                    <div className="relative w-full h-full">
+                      <iframe
+                        src={videoUrl}
+                        className="w-full h-full"
+                        allowFullScreen
+                        frameBorder="0"
+                        title={episode.name}
+                      />
                       <Button
+                        onClick={() => setOpen(false)}
                         size="sm"
                         variant="ghost"
-                        onClick={toggleFullscreen}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Maximize2 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={handleClosePlayer}
-                        className="h-8 w-8 p-0"
+                        className="absolute top-4 right-4 z-10 bg-black/50 text-white hover:bg-black"
                       >
                         <X className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
-                  <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-                    <iframe
-                      src={videoUrl}
-                      className="w-full h-full"
-                      allowFullScreen
-                      frameBorder="0"
-                      title={episode.name}
-                    />
-                  </div>
-                </div>
-              )} */}
+                )}
+              </Dialog>
             </div>
           </div>
         </CardContent>
       </Card>
-
-      {/* Полноэкранный плеер */}
-      {isPlaying && hasVideo && isFullscreen && (
-        <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
-          <div className="relative w-full h-full">
-            <div className="absolute top-4 right-4 z-10 flex gap-2">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={toggleFullscreen}
-                className="bg-black/50 text-white hover:bg-black/70"
-              >
-                <X className="w-4 h-4" />
-              </Button>
-            </div>
-            <iframe
-              src={videoUrl}
-              className="w-full h-full"
-              allowFullScreen
-              frameBorder="0"
-              title={episode.name}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };

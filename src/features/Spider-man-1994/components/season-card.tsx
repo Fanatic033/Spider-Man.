@@ -1,9 +1,9 @@
 import { FC } from "react";
 import Image from "next/image";
 import { TMDBSeason } from "@/features/types/types";
-import { Button } from "@/shared/utils/components/ui/button";
-import { Card, CardContent } from "@/shared/utils/components/ui/card";
 import { Badge, ChevronUp, ChevronDown } from "lucide-react";
+import { Card, CardContent } from "@/shared/components/ui/card";
+import { Button } from "@/shared/components/ui/button";
 
 interface Props {
   season: TMDBSeason;

@@ -5,7 +5,7 @@ import EpisodeCard from "@/features/Spider-man-1994/components/episode-card";
 import SeasonCard from "@/features/Spider-man-1994/components/season-card";
 import ShowCard from "@/features/Spider-man-1994/components/show-card";
 import { TMDBEpisode, TMDBSeason, TMDBShow } from "@/features/types/types";
-import { Button } from "@/shared/utils/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import { ArrowLeft, Calendar, Star } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -64,27 +64,27 @@ const HomePage = () => {
     }
 
     setSelectedSeason(seasonNumber);
-    
+
     // Если эпизоды уже загружены для этого сезона, просто показываем их
     if (seasonEpisodes[seasonNumber]) {
       return;
     }
 
-    setEpisodeLoading(prev => ({ ...prev, [seasonNumber]: true }));
+    setEpisodeLoading((prev) => ({ ...prev, [seasonNumber]: true }));
 
     try {
       const response = await fetch(
         `https://api.themoviedb.org/3/tv/${selectedShow.id}/season/${seasonNumber}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=ru-RU`
       );
       const seasonDetails = await response.json();
-      setSeasonEpisodes(prev => ({
+      setSeasonEpisodes((prev) => ({
         ...prev,
-        [seasonNumber]: seasonDetails.episodes || []
+        [seasonNumber]: seasonDetails.episodes || [],
       }));
     } catch (error) {
       console.error("Error fetching episodes:", error);
     } finally {
-      setEpisodeLoading(prev => ({ ...prev, [seasonNumber]: false }));
+      setEpisodeLoading((prev) => ({ ...prev, [seasonNumber]: false }));
     }
   };
 
@@ -161,7 +161,7 @@ const HomePage = () => {
                   handleSeasonClick={handleSeasonClick}
                   selectedSeason={selectedSeason}
                 />
-                
+
                 {/* Эпизоды под карточкой сезона */}
                 {selectedSeason === season.season_number && (
                   <div className="ml-4 space-y-4">
@@ -171,8 +171,8 @@ const HomePage = () => {
                       </div>
                     ) : (
                       seasonEpisodes[season.season_number]?.map((episode) => (
-                        <EpisodeCard 
-                          episode={episode} 
+                        <EpisodeCard
+                          episode={episode}
                           key={episode.id}
                           showId={selectedShow.id}
                           seasonNumber={season.season_number}
@@ -191,9 +191,12 @@ const HomePage = () => {
 
   // Главная страница со списком сериалов
   return (
-    <div className="min-h-screen bg-base-200">
+    <div
+      className="min-h-screen bg-base-200"
+      style={{ backgroundImage: "url('/bg-2.jpg')" }}
+    >
       {/* Hero Section */}
-      <div className="hero min-h-96 bg-gradient-to-r from-red-600 to-blue-600">
+      <div className="hero h-full ">
         <div className="hero-content text-center text-white">
           <div className="max-w-md">
             <h1 className="mb-5 text-5xl font-bold">Spider-Man</h1>
@@ -206,7 +209,7 @@ const HomePage = () => {
 
       {/* Сериалы */}
       <div className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">
+        <h2 className="text-3xl font-bold mb-8 text-center text-white">
           Сериалы про Человека-паука
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
