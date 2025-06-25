@@ -22,7 +22,7 @@ export const SeasonCard: FC<Props> = ({ season,handleSeasonClick,selectedSeason 
               alt={season.name}
               width={100}
               height={150}
-              className="rounded-lg"
+              className="rounded-lg h-[210px] w-[150px] object-cover"
             />
           )}
           <div className="flex-1">
