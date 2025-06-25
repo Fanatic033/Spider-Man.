@@ -1,9 +1,9 @@
-import Image from "next/image";
-import { FC } from "react";
-import { Star } from "lucide-react";
 import { TMDBShow } from "@/features/types/types";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
+import { PlayCircleIcon, Star } from "lucide-react";
+import Image from "next/image";
+import { FC } from "react";
 
 interface Props {
   show: TMDBShow;
@@ -19,16 +19,19 @@ export const ShowCard: FC<Props> = ({ show, handleShowSelect }) => {
     >
       <div className="absolute inset-0 -left-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-all duration-700 group-hover:left-full" />
       <CardHeader className="flex">
-        <div className="relative w-full h-72 overflow-hidden">
+        <div className="relative w-full h-72 overflow-hidden ">
           {show.poster_path ? (
             <Image
               src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
               alt={show.name}
               fill
               className="object-contain transition-transform duration-300 group-hover:scale-105"
+              style={{
+                borderRadius: "20%",
+              }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-white/50">
+            <div className="w-full h-full flex items-center justify-center text-white/50 ">
               Нет изображения
             </div>
           )}
@@ -54,7 +57,7 @@ export const ShowCard: FC<Props> = ({ show, handleShowSelect }) => {
           {show.overview || "Описание недоступно"}
         </p>
         <Button className="mt-5 w-full bg-gradient-to-r from-[#ff4757] to-[#ff6b7a] text-white font-semibold rounded-full py-2 hover:shadow-lg hover:-translate-y-1 transition-all">
-          ▶️ Подробнее
+          <PlayCircleIcon strokeWidth={2}  /> Подробнее
         </Button>
       </CardContent>
     </Card>

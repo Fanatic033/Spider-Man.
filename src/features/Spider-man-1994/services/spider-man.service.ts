@@ -1,18 +1,26 @@
-
 import { instance } from "@/shared/api/instance";
-
 
 class SpiderManService {
   public async GetShow() {
     try {
-      const { data } = await instance.get("/search/tv", {
-        params: {
-          query: "Spider-Man",
-          first_air_date_year: 1994,
-          language: "ru-RU",
-        },
-      });
-      return data.results;
+      const queries = [
+        { query: "Spider-Man", year: 1994 },
+        { query: "Ultimate Spider-Man", year: 2012 },
+      ];
+
+      const results = await Promise.all(
+        queries.map(({ query, year }) =>
+          instance.get("/search/tv", {
+            params: {
+              query,
+              first_air_date_year: year,
+              language: "ru-RU",
+            },
+          })
+        )
+      );
+
+      return results.flatMap((res) => res.data.results);
     } catch (error) {
       console.error(error);
       throw error;

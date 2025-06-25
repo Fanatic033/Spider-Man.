@@ -132,7 +132,7 @@ const Home = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/10 to-blue-900/10 relative overflow-hidden">
       <BgMain />
       <HeroSection />
-      <ShowList shows={shows} handleShowSelect={handleShowSelect} />
+      <ShowList shows={shows || []} handleShowSelect={handleShowSelect} />
 
       <style jsx>{`
         @keyframes float {

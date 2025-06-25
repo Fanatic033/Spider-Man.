@@ -33,8 +33,8 @@ export const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
       <Card className="bg-base-100 shadow-md hover:shadow-lg transition-shadow ">
         <CardContent className="p-3">
           <div className="flex gap-6">
-            <div className="flex-shrink-0">
-              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-primary-content font-bold mb-4">
+            <div className="flex-shrink-0 relative">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-content font-bold  absolute left-1 top-1">
                 {episode.episode_number}
               </div>
               {episode.still_path && (
@@ -50,7 +50,7 @@ export const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
 
             <div className="flex-1">
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-lg font-semibold">{episode.name}</h4>
+                <h4 className="text-lg font-semibold text-white">{episode.name}</h4>
                 <div className="flex items-center gap-4 text-sm text-base-content/70">
                   {episode.runtime && (
                     <div className="flex items-center gap-1">
@@ -69,7 +69,7 @@ export const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
                 <DialogTrigger asChild>
                   <Button
                     size="sm"
-                    className={hasVideo ? "btn-primary" : "btn-disabled"}
+                    className={hasVideo ? "btn-primary cursor-pointer" : "btn-disabled"}
                     disabled={!hasVideo}
                   >
                     <Play className="w-4 h-4 mr-2" />
