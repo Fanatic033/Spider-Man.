@@ -1,9 +1,10 @@
 import { FC } from "react";
 import Image from "next/image";
 import { TMDBSeason } from "@/features/types/types";
-import { Badge, ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
+import { Badge } from "@/shared/components/ui/badge";
 
 interface Props {
   season: TMDBSeason;
@@ -26,9 +27,16 @@ export const SeasonCard: FC<Props> = ({ season,handleSeasonClick,selectedSeason 
             />
           )}
           <div className="flex-1">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-8  mb-2">
               <h3 className="text-xl font-bold text-white">{season.name}</h3>
-              <Badge className="bg-primary text-primary-content">
+              <Badge
+              variant={'outline'}
+               className="bg-primary text-primary-content">
+                Дата выхода {season.air_date}
+              </Badge>
+              <Badge
+              variant={'outline'}
+               className="bg-primary text-primary-content">
                 {season.episode_count} эпизодов
               </Badge>
             </div>
