@@ -1,17 +1,16 @@
 "use client";
 
-import { FC, useState } from "react";
-import Image from "next/image";
 import { TMDBEpisode } from "@/features/types/types";
-import { Clock, Play, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import {
   Dialog,
-  DialogContent,
-  DialogTrigger,
+  DialogTrigger
 } from "@/shared/components/ui/dialog";
 import { getVideoUrl } from "@/shared/lib/getVideoUrl";
+import { Clock, Play, X } from "lucide-react";
+import Image from "next/image";
+import { FC, useState } from "react";
 import ReactDOM from "react-dom";
 
 interface Props {
