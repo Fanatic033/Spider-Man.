@@ -11,7 +11,7 @@ interface Props {
   selectedSeason: number | null
 }
 
-const SeasonCard: FC<Props> = ({ season,handleSeasonClick,selectedSeason }) => {
+export const SeasonCard: FC<Props> = ({ season,handleSeasonClick,selectedSeason }) => {
   return (
     <Card key={season.id} className="bg-base-100 shadow-lg">
       <CardContent className="p-6">
@@ -32,7 +32,7 @@ const SeasonCard: FC<Props> = ({ season,handleSeasonClick,selectedSeason }) => {
                 {season.episode_count} эпизодов
               </Badge>
             </div>
-            <p className="text-base-content/70 mb-4">{season.overview}</p>
+            <p className="text-base-content/70 mb-4 leading-7 [&:not(:first-child)]:mt-6">{season.overview}</p>
             <Button
               onClick={() => handleSeasonClick(season.season_number)}
               className="btn-primary"
@@ -55,5 +55,3 @@ const SeasonCard: FC<Props> = ({ season,handleSeasonClick,selectedSeason }) => {
     </Card>
   );
 };
-
-export default SeasonCard

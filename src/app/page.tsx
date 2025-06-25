@@ -1,101 +1,56 @@
 "use client";
 
-import { getSpiderManSeries } from "@/features/services/spider-man.service";
-import EpisodeCard from "@/features/Spider-man-1994/components/episode-card";
-import SeasonCard from "@/features/Spider-man-1994/components/season-card";
-import ShowCard from "@/features/Spider-man-1994/components/show-card";
-import { TMDBEpisode, TMDBSeason, TMDBShow } from "@/features/types/types";
-import { Button } from "@/shared/components/ui/button";
-import { ArrowLeft, Calendar, Star } from "lucide-react";
+import { useState } from "react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  useGetEpisodes,
+  useGetSeasons,
+  useGetShows,
+} from "@/features/Spider-man-1994/hooks";
+import { useSound } from "@/shared/hooks/useSound";
+import {
+  EpisodeCard,
+  SeasonCard,
+  ShowCard,
+} from "@/features/Spider-man-1994/components";
+import { Button } from "@/shared/components/ui/button";
+import { TMDBShow } from "@/features/types/types";
+import { containerVariants, itemVariants } from "@/shared/lib/utils";
+import { ArrowLeft, Calendar, Star } from "lucide-react";
 
 const HomePage = () => {
-  const [shows, setShows] = useState<TMDBShow[]>([]);
   const [selectedShow, setSelectedShow] = useState<TMDBShow | null>(null);
-  const [seasons, setSeasons] = useState<TMDBSeason[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
-  const [seasonEpisodes, setSeasonEpisodes] = useState<{
-    [key: number]: TMDBEpisode[];
-  }>({});
-  const [loading, setLoading] = useState(true);
-  const [episodeLoading, setEpisodeLoading] = useState<{
-    [key: number]: boolean;
-  }>({});
+  const playWebSound = useSound("/sounds/web.mp3", 0.1);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getSpiderManSeries();
-        setShows(result);
-      } catch (error) {
-        console.error("Error fetching shows:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { shows, isShowsLoading } = useGetShows();
+  const { data: seasons } = useGetSeasons(
+    selectedShow?.id ?? null,
+    !!selectedShow
+  );
+  const { data: episodes, isLoading: isEpisodesLoading } = useGetEpisodes(
+    selectedShow?.id ?? null,
+    selectedSeason,
+    !!selectedShow && selectedSeason !== null
+  );
 
-    fetchData();
-  }, []);
-
-  const handleShowSelect = async (show: TMDBShow) => {
+  const handleShowSelect = (show: TMDBShow) => {
+    playWebSound();
     setSelectedShow(show);
-    setLoading(true);
-    setSeasonEpisodes({});
     setSelectedSeason(null);
-
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${show.id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=ru-RU`
-      );
-      const showDetails = await response.json();
-      setSeasons(showDetails.seasons || []);
-    } catch (error) {
-      console.error("Error fetching seasons:", error);
-    } finally {
-      setLoading(false);
-    }
   };
 
-  const handleSeasonClick = async (seasonNumber: number) => {
-    if (selectedSeason === seasonNumber) {
-      setSelectedSeason(null);
-      return;
-    }
-
-    setSelectedSeason(seasonNumber);
-
-    if (seasonEpisodes[seasonNumber]) {
-      return;
-    }
-
-    setEpisodeLoading((prev) => ({ ...prev, [seasonNumber]: true }));
-
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${selectedShow?.id}/season/${seasonNumber}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=ru-RU`
-      );
-      const seasonDetails = await response.json();
-      setSeasonEpisodes((prev) => ({
-        ...prev,
-        [seasonNumber]: seasonDetails.episodes || [],
-      }));
-    } catch (error) {
-      console.error("Error fetching episodes:", error);
-    } finally {
-      setEpisodeLoading((prev) => ({ ...prev, [seasonNumber]: false }));
-    }
+  const handleSeasonClick = (seasonNumber: number) => {
+    setSelectedSeason((prev) => (prev === seasonNumber ? null : seasonNumber));
   };
 
   const handleBackToShows = () => {
     setSelectedShow(null);
-    setSeasons([]);
     setSelectedSeason(null);
-    setSeasonEpisodes({});
-    setEpisodeLoading({});
   };
 
-  if (loading && shows.length === 0) {
+  if (isShowsLoading || !shows) {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
         <div className="loading loading-spinner loading-lg text-primary"></div>
@@ -106,8 +61,9 @@ const HomePage = () => {
   if (selectedShow) {
     return (
       <div className="min-h-screen bg-base-200">
+        {/* Header */}
         <div className="relative h-96 bg-gradient-to-r from-red-600 to-blue-600">
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/50" />
           <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
             <div className="flex gap-8 items-center">
               {selectedShow.poster_path && (
@@ -147,10 +103,11 @@ const HomePage = () => {
           </div>
         </div>
 
+        {/* Seasons and episodes */}
         <div className="container mx-auto px-4 py-8">
           <h2 className="text-3xl font-bold mb-6">Сезоны</h2>
           <div className="space-y-6">
-            {seasons.map((season) => (
+            {seasons?.map((season) => (
               <div key={season.id} className="space-y-4">
                 <SeasonCard
                   season={season}
@@ -160,19 +117,33 @@ const HomePage = () => {
 
                 {selectedSeason === season.season_number && (
                   <div className="ml-4 space-y-4">
-                    {episodeLoading[season.season_number] ? (
+                    {isEpisodesLoading ? (
                       <div className="flex items-center justify-center py-8">
                         <div className="loading loading-spinner loading-md text-primary"></div>
                       </div>
                     ) : (
-                      seasonEpisodes[season.season_number]?.map((episode) => (
-                        <EpisodeCard
-                          episode={episode}
-                          key={episode.id}
-                          showId={selectedShow.id}
-                          seasonNumber={season.season_number}
-                        />
-                      ))
+                      <AnimatePresence>
+                        <motion.div
+                          key={`episodes-${season.id}`}
+                          variants={containerVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="exit"
+                        >
+                          {episodes?.map((episode) => (
+                            <motion.div
+                              key={episode.id}
+                              variants={itemVariants}
+                            >
+                              <EpisodeCard
+                                episode={episode}
+                                showId={selectedShow.id}
+                                seasonNumber={season.season_number}
+                              />
+                            </motion.div>
+                          ))}
+                        </motion.div>
+                      </AnimatePresence>
                     )}
                   </div>
                 )}
@@ -184,16 +155,29 @@ const HomePage = () => {
     );
   }
 
+  // Show list
   return (
     <div
       className="min-h-screen bg-base-200"
       style={{ backgroundImage: "url('/bg-2.jpg')" }}
     >
-      {/* Hero Section */}
-      <div className="hero h-full ">
+      <div className="hero h-full">
         <div className="hero-content text-center text-white">
           <div className="max-w-md">
-            <h1 className="mb-5 text-5xl font-bold">Spider-Man</h1>
+            <h1
+              className="mb-5 text-5xl font-bold"
+              style={{
+                fontSize: "4rem",
+                fontWeight: "bold",
+                background: "linear-gradient(45deg, #ff0000, #ffffff, #0000ff)",
+                backgroundClip: "text",
+                marginBottom: "1rem",
+                textShadow: "0 0 30px rgba(255, 0, 0, 0.5)",
+                animation: "pulse 2s infinite",
+              }}
+            >
+              Spider-Man
+            </h1>
             <p className="mb-5 text-xl">
               Откройте для себя все сериалы о вашем любимом супергерое
             </p>
@@ -206,7 +190,7 @@ const HomePage = () => {
           Сериалы про Человека-паука
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {shows.map((show) => (
+          {shows.map((show: TMDBShow) => (
             <ShowCard
               key={show.id}
               show={show}

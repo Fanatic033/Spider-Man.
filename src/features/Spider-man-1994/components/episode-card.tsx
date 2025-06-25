@@ -6,10 +6,7 @@ import { TMDBEpisode } from "@/features/types/types";
 import { Clock, Play, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import {
-  Dialog,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
 interface Props {
   episode: TMDBEpisode;
@@ -36,13 +33,23 @@ const getVideoUrl = (
     "888-1-11": "https://play.boomstream.com/6U8PLgtO",
     "888-1-12": "https://play.boomstream.com/sUQXEJX4",
     "888-1-13": "https://play.boomstream.com/CY8DaFTH",
+    "888-2-1": "https://play.boomstream.com/4Ftdat3F",
+    "888-2-2": "https://play.boomstream.com/yMhzEpf0",
+    "888-2-3": "https://play.boomstream.com/7UNu16QT",
+    "888-2-4": "https://play.boomstream.com/PgilkJT0",
+    "888-2-5": "https://play.boomstream.com/6CNBzOQA",
+    "888-2-6": "https://play.boomstream.com/yGWZKZuq",
+    "888-2-7": "https://play.boomstream.com/HgVKDdOF",
+    "888-2-8": "https://play.boomstream.com/TPKSQiGZ",
+    "888-2-9": "https://play.boomstream.com/IwYm8N92",
+    "888-2-10": "https://play.boomstream.com/e1FRmLv5",
   };
 
   const key = `${showId}-${seasonNumber}-${episodeNumber}`;
   return videoUrls[key] || "";
 };
 
-const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
+export const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
   const [open, setOpen] = useState(false);
 
   const videoUrl =
@@ -53,8 +60,8 @@ const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
 
   return (
     <>
-      <Card className="bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-        <CardContent className="p-6">
+      <Card className="bg-base-100 shadow-md hover:shadow-lg transition-shadow ">
+        <CardContent className="p-3">
           <div className="flex gap-6">
             <div className="flex-shrink-0">
               <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-primary-content font-bold mb-4">
@@ -84,7 +91,7 @@ const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
                   <span>{episode.air_date}</span>
                 </div>
               </div>
-              <p className="text-base-content/80 mb-4 line-clamp-3">
+              <p className="text-base-content/80 mb-4 line-clamp-3 leading-7 [&:not(:first-child)]:mt-6">
                 {episode.overview}
               </p>
 
@@ -130,4 +137,3 @@ const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
   );
 };
 
-export default EpisodeCard;
