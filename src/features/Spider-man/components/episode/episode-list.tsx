@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/shared/components/ui/card";
 import { containerVariants, itemVariants } from "@/shared/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { EpisodeCard } from "./episode-card";
-import { TMDBEpisode, TMDBSeason, TMDBShow } from "@/features/types/types";
+import { TMDBEpisode, TMDBSeason, TMDBShow } from "@/features/Spider-man/types/types";
 import { FC } from "react";
 
 interface Props {
