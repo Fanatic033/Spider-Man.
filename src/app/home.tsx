@@ -1,21 +1,21 @@
 "use client";
 
 import {
-    HeroSection,
-    SeasonCard,
-    ShowInfo
-} from "@/features/Spider-man-1994/components";
-import { EpisodeList } from "@/features/Spider-man-1994/components/episode/episode-list";
-import { ShowList } from "@/features/Spider-man-1994/components/show/show-list";
+  HeroSection,
+  SeasonCard,
+  ShowInfo,
+} from "@/features/Spider-man/components";
+import { EpisodeList } from "@/features/Spider-man/components/episode/episode-list";
+import { ShowList } from "@/features/Spider-man/components/show/show-list";
 import {
-    useGetEpisodes,
-    useGetSeasons,
-    useGetShows,
-} from "@/features/Spider-man-1994/hooks";
-import { TMDBShow } from "@/features/types/types";
+  useGetEpisodes,
+  useGetSeasons,
+  useGetShows,
+} from "@/features/Spider-man/hooks";
+import { TMDBShow } from "@/features/Spider-man/types/types";
 import { BgMain } from "@/shared/components/shared/background";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import { useSound } from "@/shared/hooks/useSound";
+import { useSound } from "@/shared/hooks/use-sound";
 import { motion } from "framer-motion";
 import { useState } from "react";
 

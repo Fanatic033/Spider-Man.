@@ -57,9 +57,10 @@ export default function RootLayout({
     <html lang="en">
       <Provider>
         <body className={`${Banger.className} antialiased comi`}>
+      <div className="min-h-screen flex flex-col">
           <Header />
           <NextTopLoader color={"#64B32C"} height={1} />
-          {children}
+          <main className="flex-grow">{children}</main>
           <footer className="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
             <aside>
               <p>
@@ -68,6 +69,7 @@ export default function RootLayout({
               </p>
             </aside>
           </footer>
+          </div>
         </body>
       </Provider>
     </html>

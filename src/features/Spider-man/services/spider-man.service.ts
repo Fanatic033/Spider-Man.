@@ -6,6 +6,8 @@ class SpiderManService {
       const queries = [
         { query: "Spider-Man", year: 1994 },
         { query: "Ultimate Spider-Man", year: 2012 },
+        // { query: "The Spectacular Spider-Man", year: 2008 },
+        // { query: "Spider-Man: The New Animated Series", year: 2003 },
       ];
 
       const results = await Promise.all(

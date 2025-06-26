@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Image from "next/image";
-import { TMDBSeason, TMDBShow } from "@/features/types/types";
+import { TMDBSeason, TMDBShow } from "@/features/Spider-man/types/types";
 import { Button } from "@/shared/components/ui/button";
 import { ArrowLeft, Badge, Star, Calendar, Clock } from "lucide-react";
 

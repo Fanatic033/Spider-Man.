@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
 import { ShowCard } from "./show-card";
-import { TMDBShow } from "@/features/types/types";
+import { TMDBShow } from "@/features/Spider-man/types/types";
 
 interface Props {
     shows: TMDBShow[];

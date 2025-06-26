@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { TMDBEpisode } from "@/features/types/types";
+import { TMDBEpisode } from "@/features/Spider-man/types/types";
 import { spiderManService } from "../services/spider-man.service";
 
 export const useGetEpisodes = (

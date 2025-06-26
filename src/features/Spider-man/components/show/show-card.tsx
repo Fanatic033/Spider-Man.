@@ -1,4 +1,4 @@
-import { TMDBShow } from "@/features/types/types";
+import { TMDBShow } from "@/features/Spider-man/types/types";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 import { PlayCircleIcon, Star } from "lucide-react";

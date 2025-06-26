@@ -1,14 +1,50 @@
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+} from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
+import Link from "next/link";
+import {
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "../ui/navigation-menu";
 
 export const Header = () => {
   return (
     <header>
       <div className="navbar bg-base-100 shadow-sm">
         <div className="navbar-start">
-          <Image src={"/logo1.png"} alt="spider-man" width={100} height={120} />
+          <Link href={"/"}>
+            <Image
+              src={"/logo1.png"}
+              alt="spider-man"
+              width={100}
+              height={120}
+            />
+          </Link>
         </div>
         <div className="navbar-center">
-          <a className="btn  text-xl">🕷️ Spider-Man </a>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem className="relative">
+                <NavigationMenuTrigger>
+                  <span className="text-xl">🕷️ Spider-Man</span>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="absolute left-2 top-full mt-2 z-50 bg-white shadow-lg rounded-lg w-36">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href="/character"
+                      className="block px-4 py-2 hover:bg-slate-100"
+                    >
+                      characters
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
         <div className="navbar-end mr-5">
           <label className="swap swap-rotate">

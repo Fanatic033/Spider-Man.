@@ -1,13 +1,10 @@
 "use client";
 
-import { TMDBEpisode } from "@/features/types/types";
+import { TMDBEpisode } from "@/features/Spider-man/types/types";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import {
-  Dialog,
-  DialogTrigger
-} from "@/shared/components/ui/dialog";
-import { getVideoUrl } from "@/shared/lib/getVideoUrl";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
+import { getVideoUrl } from "@/shared/lib/get-videoUrl";
 import { Clock, Play, X } from "lucide-react";
 import Image from "next/image";
 import { FC, useState } from "react";
@@ -50,7 +47,9 @@ export const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
 
             <div className="flex-1">
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-lg font-semibold text-white">{episode.name}</h4>
+                <h4 className="text-lg font-semibold text-white">
+                  {episode.name}
+                </h4>
                 <div className="flex items-center gap-4 text-sm text-base-content/70">
                   {episode.runtime && (
                     <div className="flex items-center gap-1">
@@ -69,7 +68,9 @@ export const EpisodeCard: FC<Props> = ({ episode, showId, seasonNumber }) => {
                 <DialogTrigger asChild>
                   <Button
                     size="sm"
-                    className={hasVideo ? "btn-primary cursor-pointer" : "btn-disabled"}
+                    className={
+                      hasVideo ? "btn-primary cursor-pointer" : "btn-disabled"
+                    }
                     disabled={!hasVideo}
                   >
                     <Play className="w-4 h-4 mr-2" />
